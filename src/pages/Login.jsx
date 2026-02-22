@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ setUser }) {
+  // Destructured setUser from props
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -10,18 +11,24 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Connect to your new login route
       const response = await axios.post(
         "http://localhost:5000/users/login",
         formData,
       );
+      const loggedInUser = response.data.user;
 
-      console.log("Login Success:", response.data);
-      alert(`Welcome back, ${response.data.user.name}!`);
+      // 1. Save user to App state and LocalStorage
+      setUser(loggedInUser);
 
-      navigate("/");
+      // 2. Navigate based on role
+      if (loggedInUser.role === "admin") navigate("/admin");
+      else if (loggedInUser.role === "dispatcher") navigate("/dispatcher");
+      else if (loggedInUser.role === "ambulance") navigate("/ambulance");
+      else navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(
+        err.response?.data?.message || "Login failed. Check your credentials.",
+      );
     }
   };
 
@@ -51,7 +58,7 @@ export default function Login() {
             </label>
             <input
               type="email"
-              className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
+              className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="you@example.com"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -63,7 +70,7 @@ export default function Login() {
             <label className="block text-sm font-semibold mb-1">Password</label>
             <input
               type="password"
-              className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
+              className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="••••••••"
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
@@ -75,7 +82,7 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg mt-8 hover:bg-blue-700 transform active:scale-[0.98] transition shadow-lg shadow-blue-200"
+          className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg mt-8 hover:bg-blue-700 transition shadow-lg shadow-blue-200"
         >
           Sign In
         </button>
