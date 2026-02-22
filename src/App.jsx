@@ -1,28 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute"; 
+
+// Portal Imports
 import UserPortal from "./pages/portals/UserPortal";
 import AdminPortal from "./pages/portals/AdminPortal";
 import AmbulancePortal from "./pages/portals/AmbulancePortal";
 import DispatcherPortal from "./pages/portals/DispatcherPortal";
 
 function App() {
-  // Initialize user from localStorage so they stay logged in on refresh
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("uzima_user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // Helper to update state and localStorage at the same time
   const handleSetUser = (userData) => {
     setUser(userData);
-    if (userData) {
-      localStorage.setItem("uzima_user", JSON.stringify(userData));
-    } else {
-      localStorage.removeItem("uzima_user");
-    }
+    if (userData) localStorage.setItem("uzima_user", JSON.stringify(userData));
+    else localStorage.removeItem("uzima_user");
   };
 
   return (
@@ -30,25 +28,48 @@ function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/signup" element={<Signup />} />
-        {/* Pass our handler to the Login page */}
         <Route path="/login" element={<Login setUser={handleSetUser} />} />
 
-        {/* Individual Portals */}
+        {/* --- PROTECTED ROUTES --- */}
+
+        {/* User Portal: Only "user" can enter */}
         <Route
           path="/dashboard"
-          element={<UserPortal user={user} setUser={handleSetUser} />}
+          element={
+            <ProtectedRoute user={user} allowedRoles={["user"]}>
+              <UserPortal user={user} setUser={handleSetUser} />
+            </ProtectedRoute>
+          }
         />
+
+        {/* Admin Portal: Only "admin" can enter */}
         <Route
           path="/admin"
-          element={<AdminPortal user={user} setUser={handleSetUser} />}
+          element={
+            <ProtectedRoute user={user} allowedRoles={["admin"]}>
+              <AdminPortal user={user} setUser={handleSetUser} />
+            </ProtectedRoute>
+          }
         />
+
+        {/* Ambulance Portal: Only "ambulance" can enter */}
         <Route
           path="/ambulance"
-          element={<AmbulancePortal user={user} setUser={handleSetUser} />}
+          element={
+            <ProtectedRoute user={user} allowedRoles={["ambulance"]}>
+              <AmbulancePortal user={user} setUser={handleSetUser} />
+            </ProtectedRoute>
+          }
         />
+
+        {/* Dispatcher Portal: Only "dispatcher" can enter */}
         <Route
           path="/dispatcher"
-          element={<DispatcherPortal user={user} setUser={handleSetUser} />}
+          element={
+            <ProtectedRoute user={user} allowedRoles={["dispatcher"]}>
+              <DispatcherPortal user={user} setUser={handleSetUser} />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </Router>
