@@ -19,8 +19,6 @@ export default function Login() {
       console.log("Login Success:", response.data);
       alert(`Welcome back, ${response.data.user.name}!`);
 
-      // For now, let's just go home.
-      // Later we can save the user to a "State" or "Context"
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
