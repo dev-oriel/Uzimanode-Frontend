@@ -54,7 +54,7 @@ export default function Login({ setUser }) {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Email Address
+              Your Email Address
             </label>
             <input
               type="email"
