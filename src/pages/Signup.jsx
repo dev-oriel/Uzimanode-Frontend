@@ -42,7 +42,7 @@ export default function Signup() {
         {/* Name Input */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
+            Enter Full Name
           </label>
           <input
             type="text"
