@@ -67,7 +67,7 @@ export default function Login({ setUser }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold mb-1">Password</label>
+            <label className="block text-sm font-semibold mb-1">Your Password</label>
             <input
               type="password"
               className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
