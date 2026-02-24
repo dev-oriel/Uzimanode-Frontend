@@ -3,9 +3,8 @@ import { useState } from "react";
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import ProtectedRoute from "./components/ProtectedRoute"; 
+import ProtectedRoute from "./components/ProtectedRoute";
 
-// Portal Imports
 import UserPortal from "./pages/portals/UserPortal";
 import AdminPortal from "./pages/portals/AdminPortal";
 import AmbulancePortal from "./pages/portals/AmbulancePortal";
