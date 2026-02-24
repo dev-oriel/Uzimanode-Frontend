@@ -56,7 +56,7 @@ export default function Signup() {
         {/* Email Input */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
+            Enter Email Address
           </label>
           <input
             type="email"
